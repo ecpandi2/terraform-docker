@@ -1,8 +1,8 @@
 terraform {
   required_providers {
     docker = {
-      source = "terraform-providers/docker"
-#      version = "2.19.0"
+      source = "kreuzwerker/docker"
+      version = "2.19.0"
     }
   }
 }
