@@ -4,4 +4,4 @@ variable "container_path_in" {}
 variable "host_path_in" {}
 variable "image_in" {}
 variable "name_in" {}
-variable "count_in" {}
+#variable "count_in" {}
