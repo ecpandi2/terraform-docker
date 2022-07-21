@@ -1,29 +1,24 @@
-variable "env" {
-  type    = string
-  default = "prod"
-}
-
 variable "image" {
   type        = map(any)
-  description = "Image for container"
+  description = "image for container"
   default = {
     dev  = "nodered/node-red:latest"
     prod = "nodered/node-red:latest-minimal"
   }
 }
 
+
 variable "ext_port" {
   type = map(any)
 
-
   validation {
-    condition     = min(var.ext_port["dev"]...) >= 1980 && max(var.ext_port["dev"]...) <= 65535
-    error_message = "The external port must be in the valid port range 1980 - 65535."
+    condition     = max(var.ext_port["dev"]...) <= 65535 && min(var.ext_port["dev"]...) >= 1980
+    error_message = "The external port must be in the valid port range 0 - 65535."
   }
 
   validation {
-    condition     = min(var.ext_port["prod"]...) >= 1880 && max(var.ext_port["prod"]...) < 1980
-    error_message = "The external port must be in the valid port range 1880 - 1889."
+    condition     = max(var.ext_port["prod"]...) < 1980 && min(var.ext_port["prod"]...) >= 1880
+    error_message = "The external port must be in the valid port range 0 - 65535."
   }
 }
 
@@ -38,5 +33,5 @@ variable "int_port" {
 }
 
 locals {
-  container_count = length(lookup(var.ext_port, var.env))
+  container_count = length(lookup(var.ext_port, terraform.workspace))
 }
