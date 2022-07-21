@@ -16,10 +16,16 @@ resource "docker_image" "nodered_image" {
   name = "nodered/node-red:latest"
 }
 
+resource "random_string" "random" {
+  length           = 4
+  special          = false
+  upper            = false
+}
+
 # start the container
 
 resource "docker_container" "nodered_container" {
-  name  = "nodered"
+  name  = "nodered-${random_string.random.result}"
   image = docker_image.nodered_image.latest
   ports {
     internal = 1880
