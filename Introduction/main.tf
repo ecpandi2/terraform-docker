@@ -9,6 +9,12 @@ terraform {
 
 provider "docker" {}
 
+resource "null_resource" "dockervol" {
+  provisioner "local-exec" {
+    command = "mkdir noderedvol/ || true && sudo chown -R 1000:1000 noderedvol/"
+  }
+}
+
 resource "docker_image" "nodered_image" {
   name = "nodered/node-red:latest"
 }
@@ -20,6 +26,7 @@ resource "random_string" "random" {
   upper   = false
 }
 
+
 resource "docker_container" "nodered_container" {
   count = var.container_count
   name  = join("-", ["nodered", random_string.random[count.index].result])
@@ -27,5 +34,9 @@ resource "docker_container" "nodered_container" {
   ports {
     internal = var.int_port
     external = var.ext_port
+  }
+  volumes {
+    container_path = "/data"
+    host_path      = "/home/pandiyan/terraform-docker/Introduction/noderedvol"
   }
 }
