@@ -53,12 +53,12 @@ output "container-name" {
   description = "The name of the container"
 }
 
-output "ip-Address" {
+output "ip-Address2" {
   value       = join(":",[docker_container.nodered_container2.ip_address, docker_container.nodered_container.ports[0].external])
   description = "The IP address of the container"
 }
 
-output "container-name" {
+output "container-name2" {
   value       = docker_container.nodered_container2.name
   description = "The name of the container"
 }
