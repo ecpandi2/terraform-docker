@@ -22,6 +22,12 @@ resource "random_string" "random" {
   upper            = false
 }
 
+resource "random_string" "random2" {
+  length           = 4
+  special          = false
+  upper            = false
+}
+
 # start the container
 
 resource "docker_container" "nodered_container" {
@@ -34,7 +40,7 @@ resource "docker_container" "nodered_container" {
 }
 
 resource "docker_container" "nodered_container2" {
-  name  = "nodered-${random_string.random.result}"
+  name  = "nodered-${random_string.random2.result}"
   image = docker_image.nodered_image.latest
   ports {
     internal = 1880
