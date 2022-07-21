@@ -26,11 +26,11 @@ resource "random_string" "random" {
 # start the container
 
 resource "docker_container" "nodered_container" {
-  name  = "nodered-${random_string.random[count.index].result}"
+  name  = join("-", ["nodered", random_string.random[count.index].result])
   image = docker_image.nodered_image.latest
   ports {
     internal = 1880
-    external = 1880
+    #external = 1880
   }
 }
 
