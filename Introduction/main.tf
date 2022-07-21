@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     docker = {
-      source = "kreuzwerker/docker"
+      source = "kreuzwerkers/docker"
     }
   }
 }
@@ -18,7 +18,6 @@ resource "random_string" "random" {
   special = false
 }
 
-
 resource "docker_container" "nodered_container" {
   count = 2
   name  = join("-", ["nodered", random_string.random[count.index].result])
@@ -29,9 +28,8 @@ resource "docker_container" "nodered_container" {
   }
 }
 
-
-output "ip-address" {
-  value = join(":", [docker_container.nodered_container[0].ip_address, docker_container.nodered_container[0].ports[0].external])
+output "ip_address" {
+  value       = [for i in docker_container.nodered_container[*] : join(":", [i.ip_address], i.ports[*]["external"])]
   description = "The IP address of the container"
 }
 
@@ -39,8 +37,3 @@ output "container_name" {
   value       = docker_container.nodered_container[*].name
   description = "The name of the container"
 }
-
- output "ip-address2" {
-   value       = join(":", [docker_container.nodered_container[1].ip_address, docker_container.nodered_container[1].ports[0].external])
-   description = "The IP address and external port of the container"
- }
